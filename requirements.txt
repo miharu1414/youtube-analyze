@@ -1,1 +1,4 @@
 youtube_dl
+requests
+https://github.com/egbertbouman/youtube-comment-downloader/archive/master.zip
+openpyxl
