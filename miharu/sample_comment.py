@@ -16,7 +16,7 @@ API_KEY = os.environ.get("API_KEY")
 VIDEO_ID = 'kgSAOq9Rt6w'
 
 
-def Make_comment_table(no,video_id):
+def Make_comment_table(video_id,no=1):
     # xlsxに保存
 	wb = openpyxl.Workbook()
 	ws = wb.worksheets[0]
@@ -114,5 +114,5 @@ def Make_comment_table(no,video_id):
 # コメントを全取得する
 video_id = VIDEO_ID
 no = 1
-Make_comment_table(no, video_id)
+Make_comment_table(video_id,no)
 
