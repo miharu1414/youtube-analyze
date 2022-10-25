@@ -16,15 +16,15 @@ API_KEY = os.environ.get("API_KEY")
 VIDEO_ID = 'kgSAOq9Rt6w'
 
 
-def Make_comment_table(video_id,no=1):
-    # xlsxに保存
+def Make_comment_table(video_id):
+	"""video_idを入力として受け取り、その動画に投稿されたコメント一覧をcsvに出力します。"""
+	# xlsxに保存
 	wb = openpyxl.Workbook()
 	ws = wb.worksheets[0]
-
+	no = 1
+	
 	def print_video_comment(no, video_id, next_page_token):
 		if no == 1:
-
-
 			columns = ['id','text','like_cnt','reply_cnt','user_name','parentId']
 			for j in range(len(columns)):
 				ws.cell(1,j+1).value = columns[j]
@@ -111,8 +111,11 @@ def Make_comment_table(video_id,no=1):
 
 	print_video_comment(no, video_id, None)
 	wb.save('data/'+video_id+'.xlsx')
-# コメントを全取得する
-video_id = VIDEO_ID
-no = 1
-Make_comment_table(video_id,no)
+ 
+ 
+if __name__ == '__main__':
+	# コメントを全取得する
+	video_id = VIDEO_ID
+
+	Make_comment_table(video_id)
 
