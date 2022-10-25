@@ -1,5 +1,7 @@
 from xmlrpc.client import NOT_WELLFORMED_ERROR
 
+from miharu.adjust_excel import Adjust_width
+
 import requests
 import json
 
@@ -112,7 +114,13 @@ def Make_comment_table(video_id):
 
 
 	print_video_comment(no, video_id, None)
-	wb.save('data/'+video_id+'.xlsx')
+	file_path = 'data/'+video_id+'.xlsx'
+	wb.save(file_path)
+	
+	Adjust_width(file_path)
+	
+	
+	
  
  
 def Url_to_id(url):
