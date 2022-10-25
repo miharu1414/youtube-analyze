@@ -4,16 +4,25 @@ import json
 import csv
 import isodate
 import datetime
-#-------↓パラメータ入力↓-------
-APIKEY = 'APIキー'
-channel_id = 'チャンネルID'
-#-------↑パラメータ入力↑-------
+import openpyxl
+
+APIKEY = API_KEY
+#↓分析したいチャンネルのidを入力
+channel_id = 'UC4B6r1TQyN5LhtDk-aaA9Qg'
+
 dt_now = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
 nextPageToken = ''
 item_count = 0
 outputs = []
+a = ['publishedAt', 'title', 'description', 'id', 'thumbnail_url', 'categoryId', 'liveBroadcastContent', 'duration', 'viewCount', 'likeCount', 'favoriteCount', 'commentCount', 'embedHtml']
 outputs.append(['publishedAt', 'title', 'description', 'url', 'thumbnail_url', 'categoryId', 'liveBroadcastContent', 'duration', 'viewCount', 'likeCount', 'favoriteCount', 'commentCount', 'embedHtml'])
 n = 0
+wb = openpyxl.Workbook()
+ws = wb.worksheets[0]
+
+for j in range(len(a)):
+    ws.cell(1, j+1).value = a[j]
+
 while True:
     #searchメソッドでvideoid一覧取得
     param = {
@@ -57,7 +66,7 @@ while True:
                         publishedAt = item['snippet']['publishedAt'] if 'publishedAt' in item['snippet'] else ''
                         title = item['snippet']['title'] if 'title' in item['snippet'] else ''
                         description = item['snippet']['description'] if 'description' in item['snippet'] else ''
-                        url = 'https://www.youtube.com/watch?v=' + item['id'] if 'id' in item else ''
+                        url = item['id'] if 'id' in item else ''
                         thumbnail_url = item['snippet']['thumbnails']['high']['url'] if 'thumbnails' in item['snippet'] else ''
                         categoryId = item['snippet']['categoryId'] if 'categoryId' in item['snippet'] else ''
                         liveBroadcastContent = item['snippet']['liveBroadcastContent'] if 'liveBroadcastContent' in item['snippet'] else ''
@@ -74,9 +83,13 @@ while True:
                         outputs.append([publishedAt, title, description, url, thumbnail_url, categoryId, liveBroadcastContent, duration, viewCount, likeCount, favoriteCount, commentCount, embedHtml])
                         n += 1
                     #CSV書き込み
-                    with open(dt_now + '_' + channel_id + '_channel-video-info.csv', 'w', newline='', encoding='UTF-8') as f:
-                        writer = csv.writer(f)
-                        writer.writerows(outputs)
+                    for i in range(1, len(outputs)):
+                        for j in range(1, 13):
+                            ws.cell(row = i+1, column = j+1, value=outputs[i][j])
+                    wb.save("data_"+channel_id+".xlsx") 
+                    wb.close()
+                    print(outputs)
+                    
             except urllib.error.HTTPError as err:
                 print(err)
                 break
