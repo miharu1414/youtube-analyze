@@ -6,6 +6,7 @@ import isodate
 import datetime
 import openpyxl
 
+
 APIKEY = API_KEY
 #↓分析したいチャンネルのidを入力
 channel_id = 'UC4B6r1TQyN5LhtDk-aaA9Qg'
