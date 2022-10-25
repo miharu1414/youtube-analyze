@@ -5,9 +5,12 @@ import csv
 import isodate
 import datetime
 import openpyxl
+import os
+from dotenv import load_dotenv
 
+load_dotenv('.env') 
 
-APIKEY = API_KEY
+APIKEY = os.environ.get("API_KEY")
 #↓分析したいチャンネルのidを入力
 channel_id = 'UC4B6r1TQyN5LhtDk-aaA9Qg'
 
