@@ -5,5 +5,4 @@ https://github.com/egbertbouman/youtube-comment-downloader/archive/master.zip
 openpyxl
 isodate
 SpeechRecognition
-pandas
-ffmpeg
+ffmpeg-python
