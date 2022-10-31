@@ -24,11 +24,14 @@ def Adjust_width(filepath):
 
     #列ループ
     for j in range(1,maxClm):
-        ws1.column_dimensions[col[j-1][0].column_letter].width = 30
+        max_length = 0
         #行を逆ループ
         for i in reversed(range(1,maxRow)):
-            ws1.cell(i,j).alignment = Alignment(vertical='justify')     
-  
+            if len(str(ws1.cell(i,j).value)) > max_length:
+                max_length = len(str(ws1.cell(i,j).value))
+            ws1.cell(i,j).alignment = Alignment(vertical='justify')
+                 
+        ws1.column_dimensions[col[j-1][0].column_letter].width = min(30,max_length)
             
             
             
