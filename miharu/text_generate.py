@@ -1,127 +1,95 @@
 import os
-import glob
-import shutil
 import subprocess
+# 音声認識
 import speech_recognition as sr
+# csv化
+import pandas as pd
 
-# 音声ファイルの分割
-import wave
-import math
-import struct
-from scipy import fromstring, int16
-import ffmpeg
 
-# mp4から音声ファイルへの変換
-def mp4_to_wav(mp4f):
-    wavf = mp4f.replace('.mp4', '.wav')
-    # 入力 
-    stream = ffmpeg.input(mp4f) 
-    # 出力 
-    stream = ffmpeg.output(stream, wavf) 
-    # 実行
-    ffmpeg.run(stream)
-    """
-    subprocess.run(['ffmpeg', '-i', mp4f, wavf], 
-                    encoding='utf-8', stdout=subprocess.PIPE,shell=True)
-    """
-    return wavf
+# miharu_data => dataに変更が必要　
 
-    # 音声ファイルの分割(デフォルト30秒)
-def cut_wav(wavf,time=30):
-  # timeの単位は[sec]
-  # ファイルを読み出し
-  wr = wave.open(wavf, 'r')
+def Movie2text(channel_id, movie_id):
 
-  # waveファイルが持つ性質を取得
-  ch = wr.getnchannels()
-  width = wr.getsampwidth()
-  fr = wr.getframerate()
-  fn = wr.getnframes()
-  total_time = 1.0 * fn / fr
-  integer = math.floor(total_time) # 小数点以下切り捨て
-  t = int(time)  # 秒数[sec]
-  frames = int(ch * fr * t)
-  num_cut = int(integer//t)
+    # 文字起こし対象のファイル
+    text_video_path = f"data/{channel_id}/movie/{movie_id}.mp4"
+    
+    # テキスト用音声データの出力先
+    audio_text_path = f"data/{channel_id}/data/audio/{movie_id}.mp3"
+    audio_change_wav = f"data/{channel_id}/data/audio/{movie_id}.wav"
 
-  # waveの実データを取得し、数値化
-  data = wr.readframes(wr.getnframes())
-  wr.close()
-  X = fromstring(data, dtype=int16)
-  
-  # wavファイルを削除
-  os.remove(wavf)
-  
-  outf_list = []
-  for i in range(num_cut):
-      # 出力データを生成
-      output_dir = 'output/cut_wav/'
-      os.makedirs(output_dir,exist_ok=True)
-      outf = output_dir + str(i).zfill(3) + '.wav'
-      start_cut = i*frames
-      end_cut = i*frames + frames
-      Y = X[start_cut:end_cut]
-      outd = struct.pack("h" * len(Y), *Y)
-
-      # 書き出し
-      ww = wave.open(outf, 'w')
-      ww.setnchannels(ch)
-      ww.setsampwidth(width)
-      ww.setframerate(fr)
-      ww.writeframes(outd)
-      ww.close()
-      
-      # リストに追加
-      outf_list.append(outf)
-  
-  return outf_list
-
-# 複数ファイルの音声のテキスト変換
-def cut_wavs_str(outf_list):
-    output_text = ''
-    # 複数処理
-    print('音声のテキスト変換')
-    for fwav in outf_list:
-        print(fwav)
+    
+    # テキスト保存場所
+    text_date = f"data/{channel_id}/data/text/{movie_id}.txt"
+    # csv保存場所
+    csv_date = f"data/{channel_id}/data/text/{movie_id}.csv"
+    
+    # mp4→mp3へ変換
+    def out_text(text_video_path, audio_text_path):
+        out_audio = subprocess.run(
+            [
+                "ffmpeg",
+                "-i",
+                text_video_path,
+                "-acodec",
+                "libmp3lame",
+                "-ab",
+                "256k",
+                audio_text_path,
+            ]
+        )
+        print(out_audio)
+    
+    # mp3からwavに変換
+    def audio_transcript(audio_change_wav):
+        transcript = subprocess.run(
+            [
+                "ffmpeg",
+                "-i",
+                audio_text_path,
+                "-vn",
+                "-ac",
+                "1",
+                "-ar",
+                "44100",
+                "-acodec",
+                "pcm_s16le",
+                "-f",
+                "wav",
+                audio_change_wav,
+            ]
+        )
+        print(transcript)
+    
+    
+    def audio_text_change(audio_change_wav, text_date, csv_date):
+        # 文字起こし
         r = sr.Recognizer()
-        
-        # 音声->テキスト
-        with sr.AudioFile(fwav) as source:
+        with sr.AudioFile(audio_change_wav) as source:
             audio = r.record(source)
-        text = r.recognize_google(audio, language='ja-JP')
-        
-        # 各ファイルの出力結果の結合
-        output_text = output_text + text + '\n'
-        # wavファイルを削除
-        os.remove(fwav)
-
-    return output_text
-
-
-# mp4からwavへの変換から音声のテキスト変換まで
-def mp4_to_text(mp4f):
-  # 出力ディレクトリ
-    try:
-        shutil.rmtree('output/cut_wav/')
-    except:
-        os.makedirs('output/cut_wav/', exist_ok=True)
+            text = r.recognize_google(audio, language="ja-JP").replace(" ", "\n")
+            print(text)
+        # textへの書き出し
+        open_text = open(text_date, "x", encoding="utf_8")
+        open_text.write(text)
+        open_text.close()
+        # txtをcsvに変換
+        read_text = pd.read_csv(text_date)
+        read_text.to_csv(csv_date, index=None)
     
-    # 音声ファイルへの変換
-    wav_file = mp4_to_wav(mp4f)
     
-    # 音声ファイルの分割(デフォルト30秒)
-    cut_wavs = cut_wav(wav_file)
+    out_text(text_video_path, audio_text_path)
     
-    # 複数ファイルの音声のテキスト変換
-    out_text = cut_wavs_str(cut_wavs)
+    # mp3が生成するまでにタイムラグがあるので、生成されるのを待つ処理
+    while os.path.isfile(audio_text_path):
+        audio_transcript(audio_change_wav)
+        print("change end")
+        if os.path.isfile(audio_change_wav):
+            print("break!!")
+            break
     
-    # テキストファイルへの入力
-    mp4f_name = os.path.basename(mp4f)
-    txt_file = 'output/' + mp4f_name.replace('.mp4', '.txt')
-    print('テキスト出力')
-    print(txt_file)
-    f = open(txt_file, 'w')
-    f.write(out_text)
-    f.close()
+    audio_text_change(audio_change_wav, text_date, csv_date)
 
-# 変換の実行
-mp4_to_text("data\movie\gnIOzY7esA0.mp4")
+if __name__ == '__main__':
+    channel_id  = input("channel_id:")
+    movie_id = input("movie_id:")
+    Movie2text(channel_id,movie_id)

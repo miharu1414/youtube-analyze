@@ -6,3 +6,4 @@ openpyxl
 isodate
 SpeechRecognition
 ffmpeg-python
+pandas
