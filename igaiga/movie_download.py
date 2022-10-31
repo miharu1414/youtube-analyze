@@ -3,9 +3,10 @@ import youtube_dl
 
 VIDEO_ID = 'gnIOzY7esA0'
 
-def Download_movie(video_id):
+#igaiga_data → dataに，sample → channel_id直す
+def Download_movie(channel_id, video_id):
     movie_url = "https://www.youtube.com/watch?v="+video_id
-    ydl_opts = {'outtmpl':"data/movie/"+video_id+".mp4",}
+    ydl_opts = {'outtmpl':"igaiga_data/sample/movie/"+video_id+".mp4",}
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         ydl.download([movie_url])
 
