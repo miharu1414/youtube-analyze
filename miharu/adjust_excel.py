@@ -2,7 +2,6 @@
     sheet_width.py
     purpose: make new xlsx and set width automatically
 '''
-
 import openpyxl as xl
 from openpyxl.styles import Alignment  
 
@@ -20,15 +19,15 @@ def Adjust_width(filepath):
     #最大列
     maxClm = ws1.max_column + 1
     
-    col = list(ws1.columns)[0]
+    col = list(ws1.columns)
 
 
     #列ループ
     for j in range(1,maxClm):
-        ws1.column_dimensions[col[0].column_letter].width = 25
+        ws1.column_dimensions[col[j-1][0].column_letter].width = 30
         #行を逆ループ
         for i in reversed(range(1,maxRow)):
-            ws1.alignment = Alignment(vertical='justify')     
+            ws1.cell(i,j).alignment = Alignment(vertical='justify')     
   
             
             
