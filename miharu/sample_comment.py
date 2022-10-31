@@ -1,6 +1,4 @@
-from xmlrpc.client import NOT_WELLFORMED_ERROR
-
-from miharu.adjust_excel import Adjust_width
+from adjust_excel import Adjust_width
 
 import requests
 import json
@@ -15,16 +13,17 @@ URL = 'https://www.googleapis.com/youtube/v3/'
 # ここにAPI KEYを入力
 API_KEY = os.environ.get("API_KEY")
 # ここにVideo idを入力
-VIDEO_ID = 'N43buH_8060'
+VIDEO_ID = 'rSI1Kbzy7-0'
 # VIDEO_URL = 'N43buH_8060'
 
+# miharu_data => dataに変更必要
 
 def Make_comment_table(channel_id,video_id):
     """URLを入力として受け取り、その動画に投稿されたコメント一覧をcsvに出力します。"""
     # xlsxに保存
     # video_id = Url_to_id(video_url)
  
-    file_path = f'data/{channel_id}/comment/{video_id}.xlsx'
+    file_path = f'miharu_data/{channel_id}/comment/{video_id}.xlsx'
   
     wb = openpyxl.Workbook()
     ws = wb.worksheets[0]
@@ -136,6 +135,6 @@ def Url_to_id(url):
 if __name__ == '__main__':
     # コメントを全取得する
     video_id = VIDEO_ID
-
-    Make_comment_table(video_id)
+    channel_id = "sample"
+    Make_comment_table(channel_id,video_id)
 
