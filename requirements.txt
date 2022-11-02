@@ -1,4 +1,4 @@
-youtube_dl
+yt_dlp
 requests
 dotenv
 https://github.com/egbertbouman/youtube-comment-downloader/archive/master.zip
