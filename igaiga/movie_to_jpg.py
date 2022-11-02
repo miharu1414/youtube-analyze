@@ -1,9 +1,10 @@
 import cv2
 import os
 import shutil
+INTERVAL = 1
 
 #sample→channel_id, igaiga_data→data
-def movie_to_jpg(channel_id, vidoe_id, frameIndex):
+def movie_to_jpg(channel_id, video_id, frameIndex, remove):
     os.mkdir("igaiga_data/sample/photo")
     fileName = "igaiga_data/sample/movie/"+video_id+".mp4"
     videoCapture = cv2.VideoCapture(fileName)
@@ -13,16 +14,17 @@ def movie_to_jpg(channel_id, vidoe_id, frameIndex):
     ## n番目のフレーム画像を返す
     def retrieveFrameImage(frameIndex):
         ## インデックスがフレームの範囲内なら…
-        if(frameIndex >= 0 & frameIndex < totalFrames):
+        if(frameIndex >= 0 & frameIndex < totalFrame):
             videoCapture.set(cv2.CAP_PROP_POS_FRAMES, frameIndex)
             ret, image = videoCapture.read()
             return image
         else:
             return None
-    for i in range(int(totalFrame/30)):
-        cv2.imwrite("igaiga_data/sample/photo/%d.jpg" % (i+1), retrieveFrameImage(i*INTERVAL))
+    for i in range(int(totalFrame/(INTERVAL*30))):
+        cv2.imwrite("igaiga_data/sample/photo/%d.jpg" % (i+1), retrieveFrameImage(i*(INTERVAL*30)))
     #ここで分析ツールを用いる
-    shutil.rmtree("igaiga_data/sample/photo")
+    if remove:
+        shutil.rmtree("igaiga_data/sample/photo")    
 
 
 
