@@ -11,11 +11,11 @@ import pandas as pd
 def Movie2text(channel_id, movie_id):
 
     # 文字起こし対象のファイル
-    text_video_path = f"data/{channel_id}/movie/{movie_id}.mp4"
+    text_video_path = f"miharu_data/{channel_id}/movie/{movie_id}.mp4"
     
     # テキスト用音声データの出力先
-    audio_text_path = f"data/{channel_id}/data/audio/{movie_id}.mp3"
-    audio_change_wav = f"data/{channel_id}/data/audio/{movie_id}.wav"
+    audio_text_path = f"miharu_data/{channel_id}/data/audio/{movie_id}.mp3"
+    audio_change_wav = f"miharu_data/{channel_id}/data/audio/{movie_id}.wav"
 
     
     # テキスト保存場所
