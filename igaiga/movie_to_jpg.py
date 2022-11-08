@@ -3,8 +3,8 @@ import os
 import shutil
 INTERVAL = 1
 
-#sample→channel_id, igaiga_data→data
-def movie_to_jpg(channel_id, video_id, frameIndex, remove):
+#sample→channel_id, igaiga_data→data, remove→本番では消す
+def movie_to_jpg(channel_id, video_id, remove=0):
     os.mkdir("igaiga_data/sample/photo")
     fileName = "igaiga_data/sample/movie/"+video_id+".mp4"
     videoCapture = cv2.VideoCapture(fileName)
