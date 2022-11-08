@@ -1,4 +1,4 @@
-from adjust_excel import Adjust_width
+from miharu.adjust_excel import Adjust_width
 
 import requests
 import json
