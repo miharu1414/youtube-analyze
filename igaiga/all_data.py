@@ -1,3 +1,4 @@
+from miharu.adjust_excel import Adjust_width
 import urllib.request
 import urllib.parse
 import json
@@ -95,6 +96,8 @@ def all_data_get(channel_id):
                         path = './igiaiga_data/' + channel_id + 'info/'
                         wb.save(path+"data_"+channel_id+".xlsx")
                         wb.close()
+
+                        Adjust_width(path+"data_"+channel_id+".xlsx")
                         
                 except urllib.error.HTTPError as err:
                     print(err)
