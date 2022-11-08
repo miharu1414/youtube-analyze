@@ -21,7 +21,7 @@ def movie_to_jpg(channel_id, video_id, remove=0):
         else:
             return None
     for i in range(int(totalFrame/(INTERVAL*30))):
-        cv2.imwrite("igaiga_data/sample/photo/%d.jpg" % (i+1), retrieveFrameImage(i*(INTERVAL*30)))
+        cv2.imwrite(f"igaiga_data/{channel_id}/photo/%d.jpg" % (i+1), retrieveFrameImage(i*(INTERVAL*30)))
     #ここで分析ツールを用いる
     if remove:
         shutil.rmtree("igaiga_data/sample/photo")    
