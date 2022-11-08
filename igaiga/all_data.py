@@ -93,7 +93,7 @@ def all_data_get(channel_id):
                         for i in range(1, len(outputs)):
                             for j in range(1, 13):
                                 ws.cell(row = i+1, column = j+1, value=outputs[i][j])
-                        path = './igiaiga_data/' + channel_id + 'info/'
+                        path = './igiaiga_data/' + channel_id + '/info/'
                         wb.save(path+"data_"+channel_id+".xlsx")
                         wb.close()
 
