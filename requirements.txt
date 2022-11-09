@@ -3,6 +3,7 @@ requests
 dotenv
 https://github.com/egbertbouman/youtube-comment-downloader/archive/master.zip
 openpyxl
+xlrd
 isodate
 SpeechRecognition
 ffmpeg-python
