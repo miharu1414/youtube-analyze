@@ -8,3 +8,4 @@ isodate
 SpeechRecognition
 ffmpeg-python
 pandas
+cv2
