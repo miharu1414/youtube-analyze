@@ -7,7 +7,7 @@ import datetime
 import openpyxl
 import os
 from dotenv import load_dotenv
-from adjust_excel import Adjust_width
+from functions_youtube.adjust_excel import Adjust_width
 
 load_dotenv('.env') 
 
