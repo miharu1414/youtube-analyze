@@ -7,7 +7,15 @@ from linebot.models import (MessageEvent, TextMessage, TextSendMessage,TemplateS
 from linebot.exceptions import (LineBotApiError, InvalidSignatureError)
 
 
-ACCESS_TOKEN = "UzasuxNCBav5Ux2FZ3luOPgscpd3GMEj0mxnBJXJcsgEJCiscsgBH+3uld5yAYLSedDIAIq2K8UztAkw0eQ8vUZHGAEfXG1kZTWWyrb9WcB61Xsh7bdWPJ1AbNmDqzEFVWKnW9PEEJD+2Eq8H21TtwdB04t89/1O/w1cDnyilFU="
+
+import os
+from dotenv import load_dotenv
+
+load_dotenv('.env') 
+
+# API情報
+
+ACCESS_TOKEN = os.environ.get("ACCESS_TOKEN")
 
 
 

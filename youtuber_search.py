@@ -1,7 +1,11 @@
 from apiclient.discovery import build
+import os
+from dotenv import load_dotenv
+
+load_dotenv('.env') 
 
 # API情報
-API_KEY = "AIzaSyCkrd8svoDBtCEgl-ep7MXCmL1Xc9ETyC0"
+API_KEY = os.environ.get("Youtube_API_KEY")
 YOUTUBE_API_SERVICE_NAME = 'youtube'
 YOUTUBE_API_VERSION = 'v3'
 
