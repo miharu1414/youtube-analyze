@@ -25,6 +25,18 @@ def MakeAction(channel_info):
         display_text = channel_info[0],
         data = channel_info[1]
     )
+    
+def Make_json_log(dict):
+    i = 0
+    while True:
+      json_path = f'new{i}.json'
+      if os.path.exists(json_path):
+        i+=1
+      else:
+        with open( f'new{i}.json', 'w') as f:
+          json.dump(dict, f)
+        break
+  
 
 if os.environ['REQUEST_METHOD'] == 'POST':
   length, _ = cgi.parse_header(os.environ['CONTENT_LENGTH'])
@@ -41,15 +53,8 @@ if os.environ['REQUEST_METHOD'] == 'POST':
     exit()
   
 
-  i = 0
-  while True:
-    json_path = f'new{i}.json'
-    if os.path.exists(json_path):
-      i+=1
-    else:
-      with open( f'new{i}.json', 'w') as f:
-        json.dump(sample_dict, f)
-      break
+  Make_json_log(sample_dict)
+
   line_bot_api = LineBotApi(channel_access_token=ACCESS_TOKEN)
   USER_ID = str(json_data["events"][0]["source"]["userId"])
 
@@ -91,7 +96,7 @@ if os.environ['REQUEST_METHOD'] == 'POST':
   # チャンネルidのボタン選択を受信した場合
   elif 'postback' == json_data["events"][0]["type"]:
     channel_id = json_data["events"][0]["postback"]["data"]
-   
+    
 
   if "admin" in reply:
     reply = reply.replace("admin","").lstrip()
