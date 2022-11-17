@@ -1,9 +1,11 @@
+# 再生回数の移動平均
+
 import openpyxl
 import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-def analize(data_path, channel_id ,ido = 1):
+def analize(data_path, channel_id, ido = 1):
     wb = openpyxl.load_workbook(data_path)
     ws = wb.worksheets[0]
 
@@ -27,7 +29,7 @@ def analize(data_path, channel_id ,ido = 1):
     for i in range(ido + 1,len(data)):
         heikin -= int(data[i-ido][8])
         heikin += int(data[i][8])
-        num.append(heikin/ido)
+        num.append(heikin)
         number += 1
 
     num = np.array(num)
@@ -36,15 +38,11 @@ def analize(data_path, channel_id ,ido = 1):
     plt.ylabel('view')
     plt.xlabel('past->now')
 
-    dirname = 'channel_data/' + channel_id + '/suii'
-    os.makedirs(dirname,exist_ok=True)
-    filename = dirname +'/' + channel_id + '_type1.jpg'
+    dirname = 'main.itogo.jp' + channel_id + '/suii/'
+    os.makedirs(dirname, exist_ok=True)
+    filename = dirname + channel_id + 'type1.jpg'
     plt.savefig(filename)
-    print(len(data))
-    print("Yes")
-    return 'https://iganami1106.com/channel_data/' + channel_id + '/suii/' + channel_id + '_type1.jpg'
-
 
 if __name__ == '__main__':
     data = 'data_UCZf__ehlCEBPop-_sldpBUQ.xlsx'
-    analize(data,"UCX1xppLvuj03ubLio8jslyA", 30)
+    analize(data, 30)
