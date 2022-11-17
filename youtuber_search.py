@@ -11,23 +11,43 @@ YOUTUBE_API_VERSION = 'v3'
 
 
 def Youtuber_search(key_word):
-    youtube = build(
-        YOUTUBE_API_SERVICE_NAME, 
-        YOUTUBE_API_VERSION,
-        developerKey=API_KEY
-        )
+    try:
+        youtube = build(
+            YOUTUBE_API_SERVICE_NAME, 
+            YOUTUBE_API_VERSION,
+            developerKey=API_KEY
+            )
 
-    search_response = youtube.search().list(
-    q='['+key_word+']',
-    part='id,snippet',
-    maxResults=25
-    ).execute()
+        search_response = youtube.search().list(
+        q='['+key_word+']',
+        part='id,snippet',
+        maxResults=25
+        ).execute()
 
-    channels = []
-    for search_result in search_response.get("items", []):
-        if search_result["id"]["kind"] == "youtube#channel":
-            channels.append([search_result["snippet"]["title"],
-                                    search_result["id"]["channelId"]])
+        channels = []
+        for search_result in search_response.get("items", []):
+            if search_result["id"]["kind"] == "youtube#channel":
+                channels.append([search_result["snippet"]["title"],
+                                        search_result["id"]["channelId"]])
+    except:
+        API_KEY = os.environ.get("Youtube_API_KEY1")
+        youtube = build(
+            YOUTUBE_API_SERVICE_NAME, 
+            YOUTUBE_API_VERSION,
+            developerKey=API_KEY
+            )
+
+        search_response = youtube.search().list(
+        q='['+key_word+']',
+        part='id,snippet',
+        maxResults=25
+        ).execute()
+
+        channels = []
+        for search_result in search_response.get("items", []):
+            if search_result["id"]["kind"] == "youtube#channel":
+                channels.append([search_result["snippet"]["title"],
+                                        search_result["id"]["channelId"]])
 
     return channels
 
